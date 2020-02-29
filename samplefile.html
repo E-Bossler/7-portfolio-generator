@@ -1,33 +1,112 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Profile</title>
-    
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>${name}</title>
 </head>
-<body>
-    <div class="jumbotron">
-        <h1 class="display-4">${developerName}</h1>
-        <p class="lead">Otherwise known as: ${developerGithub}</p>
-        <hr class="my-4">
-        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-      </div>
 
-
-<!-- USER NAME  -->
-
-<!-- LINKED TO LOCATION VIA GOOGLE MAPS  -->
-<!-- LINKED TO USERR GITHUB PROFILE  -->
-<!-- LINKED TO USER BLOG -->
-<!-- USER BIO  -->
-<!-- NUMBER OF PUBLIC REPOS  -->
-<!-- NUMBER OF FOLLOWERS -->
-<!-- NUMBE ROF GITHUB STARS -->
-<!-- NUMBE OF USERS FOLLOWING  -->
-
-
+<body style="color: ${color}; width: 850px; height: 1100px">
+    <div class="jumbotron" style="margin: 30px">
+        <img style="float: right;
+            border-style: solid;
+            border-color: ${color};
+            border-width: 5px;
+            border-radius: 50%;" alt="Qries" src="${imageurl}">
+        <h1 class="display-4">Hello, I'm ${name}!</h1>
+        <p class="lead">${bio}</p>
+        <hr>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-3'>
+                </div>
+                <div class='col-2'>
+                    <a href="http://maps.google.com/maps?q=${location}">
+                        Location: ${location}
+                    </a>
+                </div>
+                <div class='col-2'>
+                    <a href="https://github.com/${profile}">
+                        GitHub: ${profile}
+                    </a>
+                </div>
+                <div class='col-2'>
+                    <a href="${blog}">
+                        Blog: ${blog}
+                    </a>
+                </div>
+                <div class='col-3'>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron" style="margin: 30px">
+        <div class='container'>
+            <div class='row' style="margin: 0 0 20px 0">
+                <div class='col-1'>
+                </div>
+                <div class='col-4' style='border-radius: 50%;
+                    border-style: solid;
+                    border-width: 3px;
+                    border-color: ${color};
+                    background-color: white;
+                    text-align: center;
+                    padding: 50px'>
+                    <h3>Public Repos</h3>
+                    ${pubrepos}
+                </div>
+                <div class='col-2'>
+                </div>
+                <div class='col-4' style='border-radius: 50%;
+                    border-style: solid;
+                    border-width: 3px;
+                    border-color: ${color};
+                    background-color: white;
+                    text-align: center;
+                    padding: 50px'>
+                    <h3>Followers</h3>
+                    ${followers}
+                </div>
+                <div class='col-1'>
+                </div>
+            </div>
+            <div class='row' style="margin: 0 0 20px 0">
+                <div class='col-1'>
+                </div>
+                <div class='col-4' style='border-radius: 50%;
+                    border-style: solid;
+                    border-width: 3px;
+                    border-color: ${color};
+                    background-color: white;
+                    text-align: center;
+                    padding: 50px'>
+                    <h3>GitHub Stars</h3>
+                    ${stars}
+                </div>
+                <div class='col-2'>
+                </div>
+                <div class='col-4' style='border-radius: 50%;
+                    border-style: solid;
+                    border-width: 3px;
+                    border-color: ${color};
+                    background-color: white;
+                    text-align: center;
+                    padding: 50px'>
+                    <h3>Following</h3>
+                    ${following}
+                </div>
+                <div class='col-1'>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
