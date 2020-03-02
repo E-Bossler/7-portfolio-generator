@@ -3,12 +3,8 @@
 const express = require('express');
 const axios = require('axios');
 const inquirer = require('inquirer');
-const fs = require('fs'),
-convertFactory = require('electron-html-to');
-
-const conversion = convertFactory({
-  converterPath: convertFactory.converters.PDF
-});
+const fs = require('fs');
+const puppeteer = require('puppeteer');
 
 
 const app = express();
@@ -21,18 +17,6 @@ const port = 9999;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Variables
-
-let developerGithub;
-let developerImageURL;
-let developerBlog;
-let developerBio;
-let developerPublicRepos;
-let developerFollowers;
-let developerNumberOfStars;
-let developerNumberOfFollowing;
-let developerLocation;
 
 // Inquirer
 
@@ -99,128 +83,141 @@ inquirer.prompt([
 
 // Global Functions
 
-function createHTML(color, name, profile, imageurl, blog, bio, pubrepos, followers, following, stars, location) {
-  conversion({
-    html: `<!doctype html>
-      <html lang="en">
+async function createHTML(color, name, profile, imageurl, blog, bio, pubrepos, followers, following, stars, location) {
+  try {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
 
-      <head>
-          <!-- Required meta tags -->
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    await page.setContent(
 
-          <!-- Bootstrap CSS -->
-          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-              integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      `<!doctype html>
+            <html lang="en">
+      
+            <head>
+                <!-- Required meta tags -->
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                <!-- Bootstrap CSS -->
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      
+                <title>${name}</title>
+            </head>
+      
+            <body style="background-color: ${color}; width: 850px; height: 1100px">
+                <div class="jumbotron" style="margin: 30px">
+                    <img style="float: right;
+                        border-style: solid;
+                        border-color: ${color};
+                        border-width: 5px;
+                        border-radius: 50%;
+                        height: 200px" alt="Qries" src="${imageurl}">
+                    <h1 class="display-4">Hello, I'm ${name}!</h1>
+                    <p class="lead">${bio}</p>
+                    <hr>
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='col-3'>
+                            </div>
+                            <div class='col-2'>
+                                <a href="http://maps.google.com/maps?q=${location}">
+                                    Location: ${location}
+                                </a>
+                            </div>
+                            <div class='col-2'>
+                                <a href="https://github.com/${profile}">
+                                    GitHub: ${profile}
+                                </a>
+                            </div>
+                            <div class='col-2'>
+                                <a href="${blog}">
+                                    Blog: ${blog}
+                                </a>
+                            </div>
+                            <div class='col-3'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="jumbotron" style="margin: 30px">
+                    <div class='container'>
+                        <div class='row' style="margin: 0 0 20px 0">
+                            <div class='col-1'>
+                            </div>
+                            <div class='col-4' style='border-radius: 20%;
+                                border-style: solid;
+                                border-width: 3px;
+                                border-color: ${color};
+                                background-color: white;
+                                padding: 50px'>
+                                <h3>Public Repos</h3>
+                                ${pubrepos}
+                            </div>
+                            <div class='col-2'>
+                            </div>
+                            <div class='col-4' style='border-radius: 20%;
+                                border-style: solid;
+                                border-width: 3px;
+                                border-color: ${color};
+                                background-color: white;
+                                padding: 50px'>
+                                <h3>Followers</h3>
+                                ${followers}
+                            </div>
+                            <div class='col-1'>
+                            </div>
+                        </div>
+                        <div class='row' style="margin: 0 0 20px 0">
+                            <div class='col-1'>
+                            </div>
+                            <div class='col-4' style='border-radius: 20%;
+                                border-style: solid;
+                                border-width: 3px;
+                                border-color: ${color};
+                                background-color: white;
+                                padding: 50px'>
+                                <h3>GitHub Stars</h3>
+                                ${stars}
+                            </div>
+                            <div class='col-2'>
+                            </div>
+                            <div class='col-4' style='border-radius: 20%;
+                                border-style: solid;
+                                border-width: 3px;
+                                border-color: ${color};
+                                background-color: white;
+                                padding: 50px'>
+                                <h3>Following</h3>
+                                ${following}
+                            </div>
+                            <div class='col-1'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </body>
+      
+            </html>
+        `);
+    await page.emulateMedia('screen');
+    await page.pdf({
+      path: `pdfs/${profile}-profile.pdf`,
+      format: 'A4',
+      printBackground: true
+    })
 
-          <title>${name}</title>
-      </head>
+    console.log(`File Location: pdfs/${profile}-profile.pdf`);
+    await browser.close();
+    process.exit();
+  } catch (err) {
+    throw err;
+  }
+}
 
-      <body style="background-color: ${color}; width: 850px; height: 1100px">
-          <div class="jumbotron" style="margin: 30px">
-              <img style="float: right;
-                  border-style: solid;
-                  border-color: ${color};
-                  border-width: 5px;
-                  border-radius: 50%;" alt="Qries" src="${imageurl}">
-              <h1 class="display-4">Hello, I'm ${name}!</h1>
-              <p class="lead">${bio}</p>
-              <hr>
-              <div class='container'>
-                  <div class='row'>
-                      <div class='col-3'>
-                      </div>
-                      <div class='col-2'>
-                          <a href="http://maps.google.com/maps?q=${location}">
-                              Location: ${location}
-                          </a>
-                      </div>
-                      <div class='col-2'>
-                          <a href="https://github.com/${profile}">
-                              GitHub: ${profile}
-                          </a>
-                      </div>
-                      <div class='col-2'>
-                          <a href="${blog}">
-                              Blog: ${blog}
-                          </a>
-                      </div>
-                      <div class='col-3'>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="jumbotron" style="margin: 30px">
-              <div class='container'>
-                  <div class='row' style="margin: 0 0 20px 0">
-                      <div class='col-1'>
-                      </div>
-                      <div class='col-4' style='border-radius: 50%;
-                          border-style: solid;
-                          border-width: 3px;
-                          border-color: ${color};
-                          background-color: white;
-                          text-align: center;
-                          padding: 50px'>
-                          <h3>Public Repos</h3>
-                          ${pubrepos}
-                      </div>
-                      <div class='col-2'>
-                      </div>
-                      <div class='col-4' style='border-radius: 50%;
-                          border-style: solid;
-                          border-width: 3px;
-                          border-color: ${color};
-                          background-color: white;
-                          text-align: center;
-                          padding: 50px'>
-                          <h3>Followers</h3>
-                          ${followers}
-                      </div>
-                      <div class='col-1'>
-                      </div>
-                  </div>
-                  <div class='row' style="margin: 0 0 20px 0">
-                      <div class='col-1'>
-                      </div>
-                      <div class='col-4' style='border-radius: 50%;
-                          border-style: solid;
-                          border-width: 3px;
-                          border-color: ${color};
-                          background-color: white;
-                          text-align: center;
-                          padding: 50px'>
-                          <h3>GitHub Stars</h3>
-                          ${stars}
-                      </div>
-                      <div class='col-2'>
-                      </div>
-                      <div class='col-4' style='border-radius: 50%;
-                          border-style: solid;
-                          border-width: 3px;
-                          border-color: ${color};
-                          background-color: white;
-                          text-align: center;
-                          padding: 50px'>
-                          <h3>Following</h3>
-                          ${following}
-                      </div>
-                      <div class='col-1'>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </body>
 
-      </html>
-  `}, function (err, result) {
-    if (err) {
-      return console.error(err);
-    }
 
-    console.log(result.numberOfPages);
-    console.log(result.logs);
-    result.stream.pipe(fs.createWriteStream(`${developerGithub}-profile.pdf`));
-    conversion.kill();
-  });
-};
+
+
+
+
+
