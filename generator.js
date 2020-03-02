@@ -35,9 +35,12 @@ inquirer.prompt([
     name: 'favColor',
     choices: [
       'pink',
-      'bright green',
-      'light blue',
-      'orange'
+      'green',
+      'blue',
+      'orange',
+      'black',
+      'red',
+      'lightskyblue'
     ]
   }
 ]).then(({ devName, devGithub, favColor }) => {
@@ -47,11 +50,11 @@ inquirer.prompt([
 
   axios.get(developerGithubUrl)
     .then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       const info = response.data;
       const developerGithub = info.login;
       const developerImageURL = info.avatar_url;
-      const developerBlog = info.glob;
+      const developerBlog = info.blog;
       const developerBio = info.bio;
       const developerPublicRepos = info.public_repos;
       const developerFollowers = info.followers;
@@ -63,6 +66,7 @@ inquirer.prompt([
         .then((response) => {
           // console.log(response.data);
           const developerNumberOfStars = response.data.length;
+          console.log('Hold on a sec, I am making your pdf')
           createHTML(
             favoriteColor,
             developerName,
@@ -89,7 +93,6 @@ async function createHTML(color, name, profile, imageurl, blog, bio, pubrepos, f
     const page = await browser.newPage();
 
     await page.setContent(
-
       `<!doctype html>
             <html lang="en">
       
@@ -117,24 +120,22 @@ async function createHTML(color, name, profile, imageurl, blog, bio, pubrepos, f
                     <hr>
                     <div class='container'>
                         <div class='row'>
-                            <div class='col-3'>
-                            </div>
-                            <div class='col-2'>
+                            <div class='col'>
                                 <a href="http://maps.google.com/maps?q=${location}">
-                                    Location: ${location}
+                                    ${location}
                                 </a>
                             </div>
-                            <div class='col-2'>
+                            <div class='col'>
                                 <a href="https://github.com/${profile}">
-                                    GitHub: ${profile}
+                                    GITHUB
                                 </a>
                             </div>
-                            <div class='col-2'>
+                            <div class='col'>
                                 <a href="${blog}">
-                                    Blog: ${blog}
+                                    BLOG
                                 </a>
                             </div>
-                            <div class='col-3'>
+                            <div class='col'>
                             </div>
                         </div>
                     </div>
@@ -149,7 +150,7 @@ async function createHTML(color, name, profile, imageurl, blog, bio, pubrepos, f
                                 border-width: 3px;
                                 border-color: ${color};
                                 background-color: white;
-                                padding: 50px'>
+                                padding: 20px'>
                                 <h3>Public Repos</h3>
                                 ${pubrepos}
                             </div>
@@ -160,7 +161,7 @@ async function createHTML(color, name, profile, imageurl, blog, bio, pubrepos, f
                                 border-width: 3px;
                                 border-color: ${color};
                                 background-color: white;
-                                padding: 50px'>
+                                padding: 20px'>
                                 <h3>Followers</h3>
                                 ${followers}
                             </div>
@@ -175,7 +176,7 @@ async function createHTML(color, name, profile, imageurl, blog, bio, pubrepos, f
                                 border-width: 3px;
                                 border-color: ${color};
                                 background-color: white;
-                                padding: 50px'>
+                                padding: 20px'>
                                 <h3>GitHub Stars</h3>
                                 ${stars}
                             </div>
@@ -186,7 +187,7 @@ async function createHTML(color, name, profile, imageurl, blog, bio, pubrepos, f
                                 border-width: 3px;
                                 border-color: ${color};
                                 background-color: white;
-                                padding: 50px'>
+                                padding: 20px'>
                                 <h3>Following</h3>
                                 ${following}
                             </div>
