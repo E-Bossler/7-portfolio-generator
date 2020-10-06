@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "axios": "^0.19.2",
-    "electron": "^8.0.2",
+    "electron": "^8.5.2",
     "electron-html-to": "^2.6.0",
     "electron-prebuilt": "^1.4.13",
     "express": "^4.17.1",
