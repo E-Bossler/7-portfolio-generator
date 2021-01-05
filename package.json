@@ -4,7 +4,7 @@
   "description": "a command-line application that dynamically generates a PDF profile from a GitHub username",
   "main": "index.js",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "electron": "^8.0.2",
     "electron-html-to": "^2.6.0",
     "electron-prebuilt": "^1.4.13",
